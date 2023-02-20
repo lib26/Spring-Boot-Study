@@ -11,7 +11,7 @@ class MemberRepositoryTest {
     // 싱글톤
     MemberRepository memberRepository = MemberRepository.getInstance();
 
-    // 매 테스트마다 초기화해주기 위함
+    // 매 테스트가 끝나면 초기화해주기 위함
     @AfterEach
     void afterEach() {
         memberRepository.clearStore();
