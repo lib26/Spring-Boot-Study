@@ -44,7 +44,7 @@ public class FrontControllerServletV3 extends HttpServlet {
         view.render(mv.getModel(), request, response); // 모델을 같이 넘겨서 렌더링한다
     }
 
-    // 모든 파라미터 뽑기
+    // request 요청에서 모든 파라미터 뽑기
     private Map<String, String> createParamMap(HttpServletRequest request) {
         Map<String, String> paramMap = new HashMap<>();
         request.getParameterNames().asIterator()
