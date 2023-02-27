@@ -55,6 +55,7 @@ public class FrontControllerServletV5 extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        // 1. 핸들러 조회
         // 헨들러(컨트롤러) 찾기
         Object handler = getHandler(request);
         if (handler == null) {
@@ -62,13 +63,18 @@ public class FrontControllerServletV5 extends HttpServlet {
             return;
         }
 
+        // 2. 핸들러 어댑터 조회 - 핸들러를 처리할 수 있는 어댑터
         // 어뎁터(v3 컨트롤러인지 v4 컨트롤러인지) 찾기
         MyHandlerAdapter adapter = getHandlerAdapter(handler);
 
+        // 3. 핸들러 어댑터 실행 -> 4. 핸들러 어댑터를 통해 핸들러 실행 -> 5. ModelAndView 반환
         // 어댑터의 handle(request, response, handler) 메서드를 통해 실제 어댑터가 호출된다.
         ModelView mv = adapter.handle(request, response, handler);
 
+        // 6. 뷰 리졸버를 통해서 뷰 찾기, 7. View 반환
         MyView view = viewResolver(mv.getViewName());
+
+        // 8. 뷰 렌더링. 모델도 같이 넘겨줌
         view.render(mv.getModel(), request, response);
     }
 
@@ -90,6 +96,7 @@ public class FrontControllerServletV5 extends HttpServlet {
         throw new IllegalArgumentException("handler adapter를 찾을 수 없습니다. handler=" + handler);
     }
 
+    // 뷰 리졸버는 뷰의 논리 이름을 물리 이름으로 바꾸고, 렌더링 역할을 담당하는 뷰 객체를 반환한다.
     private MyView viewResolver(String viewName) {
         return new MyView("/WEB-INF/views/" + viewName + ".jsp");
     }

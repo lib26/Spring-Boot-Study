@@ -18,14 +18,14 @@ public class MyView {
 
     public void render(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher(viewPath);
-        dispatcher.forward(request, response);
+        dispatcher.forward(request, response); // JSP로 가라
     }
 
     // 오버로딩?
     public void render(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         modelToRequestAttribute(model, request);
         RequestDispatcher dispatcher = request.getRequestDispatcher(viewPath);
-        dispatcher.forward(request, response);
+        dispatcher.forward(request, response); // JSP로 가라
     }
 
     private void modelToRequestAttribute(Map<String, Object> model, HttpServletRequest request) {
