@@ -1,5 +1,6 @@
-package hello.itemservice.domain;
+package hello.itemservice.domain.item;
 
+import hello.itemservice.domain.item.Item;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
