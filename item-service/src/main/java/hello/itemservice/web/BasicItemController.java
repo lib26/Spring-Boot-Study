@@ -25,7 +25,6 @@ public class BasicItemController {
         return "basic/items"; // 동적 html인 templates/basic/items 경로를 의미
     }
 
-
     @GetMapping("/{itemId}")
     public String item(@PathVariable Long itemId, Model model) {
         Item item = itemRepository.findById(itemId);
@@ -37,7 +36,7 @@ public class BasicItemController {
     public String addForm() {
         return "basic/addForm";
     }
-//
+
 //    @PostMapping("/add")
 //    public String save() {
 //        return "basic/addForm";
@@ -61,7 +60,7 @@ public class BasicItemController {
      * @ModelAttribute("item") Item item
      * model.addAttribute("item", item); 자동 추가
      */
-    @PostMapping("/add")
+    //@PostMapping("/add")
     public String addItemV2(@ModelAttribute("item") Item item, Model model) {
         itemRepository.save(item);
         //model.addAttribute("item", item); //자동 추가, 생략 가능
@@ -69,24 +68,37 @@ public class BasicItemController {
     }
 
     /**
-     * @ModelAttribute name 생략 가능
+     * @ModelAttribute name 생략 가능. 보통 이렇게 사용한다
      * model.addAttribute(item); 자동 추가, 생략 가능
      * 생략시 model에 저장되는 name은 클래스명 첫글자만 소문자로 등록 Item -> item
      */
-    @PostMapping("/add")
+    //@PostMapping("/add")
     public String addItemV3(@ModelAttribute Item item) {
         itemRepository.save(item);
         return "basic/item";
     }
 
     /**
-     * @ModelAttribute 자체 생략 가능
+     * @ModelAttribute 자체 생략 가능. 하지만 이거까지 생략하기엔 명시성이 너무 떨어진다..
      * model.addAttribute(item) 자동 추가
      */
     @PostMapping("/add")
     public String addItemV4(Item item) {
         itemRepository.save(item);
         return "basic/item";
+    }
+
+    @GetMapping("/{itemId}/edit")
+    public String editForm(@PathVariable Long itemId, Model model) {
+        Item item = itemRepository.findById(itemId);
+        model.addAttribute("item", item);
+        return "basic/editForm";
+    }
+
+    @PostMapping("/{itemId}/edit")
+    public String edit(@PathVariable Long itemId, @ModelAttribute Item item) {
+        itemRepository.update(itemId, item);
+        return "redirect:/basic/items/{itemId}"; // view path가 아니라 url이다.
     }
 
     /**
