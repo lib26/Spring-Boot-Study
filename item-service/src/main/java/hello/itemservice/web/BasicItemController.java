@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.annotation.PostConstruct;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -37,10 +38,10 @@ public class BasicItemController {
         return "basic/addForm";
     }
 
-//    @PostMapping("/add")
-//    public String save() {
-//        return "basic/addForm";
-//    }
+    // @PostMapping("/add")
+    public String save() {
+        return "basic/addForm";
+    }
 
     //@PostMapping("/add")
     public String addItemV1(@RequestParam String itemName,
@@ -57,7 +58,7 @@ public class BasicItemController {
     }
 
     /**
-     * @ModelAttribute("item") Item item
+     * @ModelAttribute("item") Item -> item 즉, 객체의 맨 앞 알파벳을 소문자 처리한다
      * model.addAttribute("item", item); 자동 추가
      */
     //@PostMapping("/add")
@@ -82,10 +83,31 @@ public class BasicItemController {
      * @ModelAttribute 자체 생략 가능. 하지만 이거까지 생략하기엔 명시성이 너무 떨어진다..
      * model.addAttribute(item) 자동 추가
      */
-    @PostMapping("/add")
+    // @PostMapping("/add")
     public String addItemV4(Item item) {
         itemRepository.save(item);
         return "basic/item";
+    }
+
+    /**
+     * PRG - Post/Redirect/Get
+     */
+    // @PostMapping("/add")
+    public String addItemV5(@ModelAttribute Item item) {
+        itemRepository.save(item);
+        return "redirect:/basic/items/" + item.getId();
+    }
+
+    /**
+     * PRG - Post/Redirect/Get
+     * RedirectAttributes
+     */
+    @PostMapping("/add")
+    public String addItemV6(@ModelAttribute Item item, RedirectAttributes redirectAttributes) {
+        Item savedItem = itemRepository.save(item);
+        redirectAttributes.addAttribute("itemId", savedItem.getId());
+        redirectAttributes.addAttribute("status", true);
+        return "redirect:/basic/items/{itemId}"; // ex) redirect:/basic/items/3?status=true
     }
 
     @GetMapping("/{itemId}/edit")
